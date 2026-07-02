@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: postgres-init-sql
+  namespace: task-app
+data:
+  init.sql: |
+    CREATE TABLE IF NOT EXISTS tasks (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(200) NOT NULL,
+        description TEXT,
+        status VARCHAR(20) NOT NULL DEFAULT 'pending'
+            CHECK (status IN ('pending', 'in_progress', 'completed')),
+        priority VARCHAR(10) NOT NULL DEFAULT 'medium'
+            CHECK (priority IN ('low', 'medium', 'high')),
+        created_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW(),
+        updated_at TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT NOW()
+    );
+
+    INSERT INTO tasks (title, description, status, priority) VALUES
+        ('Set up Kubernetes', 'Deploy app to minikube', 'completed', 'high'),
+        ('Configure ArgoCD', 'Set up GitOps pipeline', 'in_progress', 'high'),
+        ('Add Prometheus metrics', 'Instrument Flask app', 'pending', 'medium'),
+        ('Build Grafana dashboards', 'Visualise app metrics', 'pending', 'medium')
+    ON CONFLICT DO NOTHING;
