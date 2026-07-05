@@ -26,7 +26,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: pratik4106/task-app-backend:v1
+          image: pratik4106/task-app-backend:v4
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
