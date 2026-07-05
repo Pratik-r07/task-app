@@ -117,20 +117,12 @@ pipeline {
 
     post {
         success {
-            echo """
-            ✅ Pipeline SUCCESS!
-            Backend:  ${BACKEND_IMAGE}:${IMAGE_TAG}
-            Frontend: ${FRONTEND_IMAGE}:${IMAGE_TAG}
-            """
+            echo "✅ Pipeline SUCCESS! Images pushed with tag v${BUILD_NUMBER}"
         }
         failure {
             echo "❌ Pipeline FAILED — check logs above"
         }
         always {
-            sh """
-                docker rmi ${BACKEND_IMAGE}:${IMAGE_TAG} || true
-                docker rmi ${FRONTEND_IMAGE}:${IMAGE_TAG} || true
-            """
             cleanWs()
         }
     }
